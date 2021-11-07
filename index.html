@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Cupcats Official Rarity Rankings</title>
     <link rel="icon" href="https://cupcatnft.com/cat3.ico" type="image/x-icon"/>
 
@@ -10,15 +11,20 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
             integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
             crossorigin="anonymous"></script>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
-            integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-2.2.4.min.js"
+            integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="
+            crossorigin="anonymous"></script>
 
-    <script type="text/javascript"
-            src="//cdnjs.cloudflare.com/ajax/libs/jquery.lazy/1.7.10/jquery.lazy.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet"/>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
     <style>
         body {
             background-color: #E5A4FF;
+        }
+
+        .sidebar {
+            width: 280px;
         }
 
         .page-container {
@@ -35,6 +41,24 @@
             overflow-y: hidden;
         }
 
+        #cupcat-container {
+            padding-bottom: 100px;
+        }
+
+        .pagination-container {
+            position: absolute;
+            bottom: 25px;
+            right: 25px;
+        }
+
+        .filter-container {
+            overflow-y: auto;
+        }
+
+        .cat-prop {
+            width: 230px;
+        }
+
         .card {
             margin: .5em auto .5em;
             height: calc(100% - 1em);
@@ -49,26 +73,85 @@
         input[type=number] {
             -moz-appearance: textfield;
         }
+
+        .navbar {
+            display: none;
+        }
+
+        #filter {
+            display: none;
+        }
+
+        @media (max-width: 860px) {
+            .sidebar {
+                position: absolute;
+                left: -100vw;
+                padding-top: 0px !important;
+            }
+
+            .sidebar.open {
+                width: 100vw;
+                left: 0;
+                top: 56px;
+                bottom: 0;
+                z-index: 99;
+            }
+
+            .cat-prop {
+                width: calc(100vw - 2rem);
+            }
+
+            .sidebar .title.d-flex {
+                display: none !important;
+            }
+
+            #cupcat-container {
+                margin-top: 60px;
+            }
+
+            #cupcat-container .col {
+                max-width: none !important;
+            }
+
+            .navbar {
+                display: block;
+            }
+
+            #filter {
+                display: inline-block;
+            }
+        }
     </style>
 </head>
 <body>
-
 <div class="page-container">
-    <div class="d-flex flex-column flex-shrink-0 p-3 bg-light" style="width: 280px;">
-        <span class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-dark text-decoration-none">
-            <span class="fs-6">Cupcats Official Rarity Rankings</span>
-        </span>
+    <nav class="navbar fixed-top navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+            <span class="navbar-text"><strong>Cupcats Official Rarity Rankings</strong></span>
+            <button class="navbar-toggler" type="button">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+        </div>
+    </nav>
+    <div class="d-flex flex-column flex-shrink-0 p-3 bg-light sidebar">
+    <span class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-dark text-decoration-none title">
+        <span class="fs-6">Cupcats Official Rarity Rankings</span>
+    </span>
         <hr>
-        <div class="flex-column mb-auto">
+        <div class="flex-column mb-auto filter-container">
             <form id="searchForm" class="d-flex">
                 <input class="form-control me-2" id="query" type="number" placeholder="Find Cupcat By ID..."
                        aria-label="Search">
                 <button class="btn btn-secondary" type="submit">Find</button>
             </form>
             <div id="current-searches" class="mt-2"></div>
+            <div class="prop-select-container"></div>
         </div>
         <hr>
-        <button class="btn btn-primary" id="clear-filters" disabled type="button">Clear Filters</button>
+        <div class="d-grid gap-2">
+            <button class="btn btn-primary" id="filter" type="button">Filter</button>
+            <button class="btn btn-danger" id="clear-filters" disabled type="button">Clear Filters</button>
+        </div>
     </div>
     <div class="d-flex flex-column flex-grow-1">
         <div class="container-fluid" style="overflow: auto;">
@@ -76,72 +159,67 @@
             </div>
         </div>
     </div>
-    <!--<nav class="navbar fixed-top navbar-expand-lg navbar-light bg-light">
-        <div class="container-fluid">
-            <form id="searchForm" class="d-flex">
-                <input class="form-control-lg me-2" id="query" type="search" placeholder="Search and press Enter"
-                       aria-label="Search">
-                <button class="btn btn-lg btn-secondary" type="submit">Search</button>
-            </form>
-            <span class="navbar-text d-none d-lg-inline"><strong>Cupcats Official Rarity Rankings</strong></span>
-            <ul class="pagination pagination-lg" style="margin-bottom: 0px;">
-                <li class="page-item disabled" id="previous">
-                    <a class="page-link" href="#" aria-label="Previous">
-                        <span aria-hidden="true">&laquo;</span>
-                        <span class="sr-only">Previous</span>
-                    </a>
-                </li>
-                <li class="page-item" id="next">
-                    <a class="page-link" href="#" aria-label="Next">
-                        <span aria-hidden="true">&raquo;</span>
-                        <span class="sr-only">Next</span>
-                    </a>
-                </li>
-            </ul>
-        </div>
-    </nav>-->
+    <div class="pagination-container">
+        <ul class="pagination pagination-lg" style="margin-bottom: 0px;">
+            <li class="page-item disabled" id="previous">
+                <a class="page-link" href="#" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                    <span class="sr-only">Previous</span>
+                </a>
+            </li>
+            <li class="page-item" id="next">
+                <a class="page-link" href="#" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                    <span class="sr-only">Next</span>
+                </a>
+            </li>
+        </ul>
+    </div>
 </div>
 
 <script>
     (function ($) {
         const createTemplate = cupcat => `
-            <div class="col" style="max-width: 325px;">
-                <div class="card" style="width: 256px;">
-                    <img src="${cupcat.image}" class="card-img-top" alt="${cupcat.name}" loading=lazy>
-                    <div class="card-body">
-                        <h5 class="card-title">${cupcat.name}</h5>
-                        <p class="card-text">
-                            Rank <strong>#${cupcat.rank}</strong> <br>
-                            Score: ${cupcat.value}
-                        </p>
-                        <p style="display: ${!!cupcat.owner ? 'block' : 'none'}">
-                            Owner: ${cupcat.owner}
-                            <span style="display: block; visibility: ${!!cupcat.price ? 'visible' : 'hidden'}">
-                                Price: <strong>${cupcat.price}</strong> ETH
-                            </span>
-                        </p>
-                        <a href="https://opensea.io/assets/0x8cd8155e1af6ad31dd9eec2ced37e04145acfcb3/${cupcat.name.replace('Cupcat ', '')}"
-                            target="_blank"
-                           class="btn btn-primary">View On OpenSea</a>
-                    </div>
+        <div class="col" style="max-width: 325px;">
+            <div class="card" style="width: 256px;">
+                <img src="${cupcat.image}" class="card-img-top" alt="${cupcat.name}" loading=lazy>
+                <div class="card-body">
+                    <h5 class="card-title">${cupcat.name}</h5>
+                    <p class="card-text">
+                        Rank <strong>#${cupcat.rank}</strong> <br>
+                        Score: ${cupcat.value}
+                    </p>
+                    <p style="display: ${!!cupcat.owner ? 'block' : 'none'}">
+                        Owner: ${cupcat.owner}
+                        <span style="display: block; visibility: ${!!cupcat.price ? 'visible' : 'hidden'}">
+                            Price: <strong>${cupcat.price}</strong> ETH
+                        </span>
+                    </p>
+                    <a href="https://opensea.io/assets/0x8cd8155e1af6ad31dd9eec2ced37e04145acfcb3/${cupcat.name.replace('Cupcat ', '')}"
+                        target="_blank"
+                       class="btn btn-primary">View On OpenSea</a>
                 </div>
-            </div>`;
+            </div>
+        </div>`;
 
         const searchTemplate = search => `
-            <a href="#" data-val="${search}" class="search-param" style="text-decoration: none;">
-                <span class="badge bg-primary p-2 mb-2">
-                    ${search}&nbsp;&nbsp;&nbsp;&nbsp;
-                    <strong>X</strong>
-                </span>
-            </a>
-        `;
+        <a href="#" data-val="${search}" class="search-param" style="text-decoration: none;">
+            <span class="badge bg-primary p-2 mb-2">
+                ${search}&nbsp;&nbsp;&nbsp;&nbsp;
+                <strong>X</strong>
+            </span>
+        </a>
+    `;
 
         let lastValue = 0;
         let currentRank = 1;
         let cupcats = [];
         let cupcatsCannoncial = [];
         let filteredCats = [];
+        let currentPropSearch = false;
+        let propFilteredCats = [];
         let currentPage = 0;
+        let metaData = {};
 
         $.ajaxSetup({cache: false});
         $.getJSON('sorted.json', data => {
@@ -161,6 +239,30 @@
             selectPage(currentPage);
         });
 
+        $.getJSON('metadata-map.json', data => {
+            metaData = data;
+            let i = 0;
+            for (let prop in data) {
+                let selectHtml = `<div class="cat-prop-container mt-2"><label>${prop}<select class="cat-prop" multiple="multiple"></label>`;
+                for (let type in data[prop]) {
+                    selectHtml += `<option data-parent="${prop}" value="${type}">${type}</option>`
+                }
+                selectHtml += '</select></div>';
+                $('.prop-select-container').append(selectHtml);
+            }
+            $('.cat-prop').select2();
+            $('.cat-prop').on('select2:select', () => {
+                propSelectionChanged();
+            });
+            $('.cat-prop').on('select2:unselect', () => {
+                propSelectionChanged();
+            });
+        });
+
+        $('.navbar-toggler, #filter').click(() => {
+            $('.sidebar').toggleClass('open');
+        });
+
         $('#previous').click(() => {
             if (!$('#previous').hasClass('disabled')) {
                 selectPage(--currentPage);
@@ -173,18 +275,21 @@
         });
 
         // remove a filter item
-        $(document).on('click', '.search-param', function() {
+        $(document).on('click', '.search-param', function () {
             filteredCats = filteredCats.filter(filter => filter != $(this).data('val'));
-            console.info($(this).data('val'), filteredCats);
             buildFilteredCats();
         });
         $('#clear-filters').click(() => {
             filteredCats = [];
+            propFilteredCats = [];
+            currentPropSearch = false;
+            $('.cat-prop').val(null).trigger('change');
+            $('.sidebar').removeClass('open');
             buildFilteredCats();
         });
         $('#searchForm').submit(event => {
             let query = $('#query').val();
-            if(query) {
+            if (query) {
                 filteredCats.push(query);
             }
             buildFilteredCats();
@@ -192,10 +297,34 @@
             return false;
         });
 
+        function propSelectionChanged() {
+            propFilteredCats = [];
+            currentPropSearch = false;
+            let tempMap = {};
+            let isFirstProp = true;
+            $('.cat-prop').find(':selected').each(function () {
+                currentPropSearch = true;
+                tempMap[$(this).attr('data-parent')] = tempMap[$(this).attr('data-parent')] || [];
+                tempMap[$(this).attr('data-parent')].push(...metaData[$(this).attr('data-parent')][$(this).attr('value')]);
+            });
+
+
+            for (let prop in tempMap) {
+                if (isFirstProp) {
+                    propFilteredCats = tempMap[prop];
+                    isFirstProp = false;
+                } else {
+                    propFilteredCats = propFilteredCats.filter(id => tempMap[prop].indexOf(id) > -1);
+                }
+            }
+            buildFilteredCats();
+        }
+
         function buildFilteredCats() {
-            if(filteredCats.length) {
+            if (filteredCats.length || currentPropSearch) {
                 cupcats = cupcatsCannoncial.filter(cupcat => {
-                    return filteredCats.indexOf(cupcat.assetId) > -1;
+                    return (filteredCats.length === 0 || filteredCats.indexOf(cupcat.assetId) > -1) &&
+                        (!currentPropSearch || propFilteredCats.indexOf(Number(cupcat.assetId)) > -1);
                 });
             } else {
                 cupcats = cupcatsCannoncial.slice();
@@ -205,7 +334,7 @@
             filteredCats.forEach(query => {
                 $('#current-searches').append(searchTemplate(query));
             });
-            $('#clear-filters').prop('disabled', !filteredCats.length);
+            $('#clear-filters').prop('disabled', !filteredCats.length && !currentPropSearch);
             $('#query').val('');
             currentPage = 0;
             selectPage(currentPage);
@@ -214,13 +343,13 @@
         function selectPage(pageNumber) {
             const pageCats = [];
             $('#cupcat-container').empty();
-            $('#previous').toggleClass('disabled', pageNumber === 0);
-            $('#next').toggleClass('disabled', ((pageNumber * 30) + 30) >= cupcats.length);
+            $('#previous').addClass('disabled');
+            $('#next').addClass('disabled');
             for (let i = pageNumber * 30; i < ((pageNumber * 30) + 30) && i < (cupcats.length); i++) {
                 pageCats.push(cupcats[i]);
             }
 
-            getOpenSeaInfo(pageCats, function() {
+            getOpenSeaInfo(pageCats, function () {
                 pageCats.forEach(cupcat => {
                     $('#cupcat-container').append(createTemplate(cupcat));
                 });
@@ -241,7 +370,7 @@
                 }
             ).done(function (response) {
                 const responseMap = {};
-                if(response.assets) {
+                if (response.assets) {
                     response.assets.forEach(asset => {
                         responseMap[asset.token_id] = asset;
                     })
@@ -251,16 +380,16 @@
                         if (osData) {
                             cupcat.owner = osData.owner.user ? osData.owner.user.username : '';
 
-                            if(!cupcat.owner) {
+                            if (!cupcat.owner) {
                                 cupcat.owner = osData.owner.address.substring(0, 6) + '...' + osData.owner.address.slice(-4);
                             }
 
-                            if(osData.sell_orders && osData.sell_orders.length) {
+                            if (osData.sell_orders && osData.sell_orders.length) {
                                 const forSale = osData.sell_orders[0];
 
                                 // ETH
-                                if(forSale.payment_token === '0x0000000000000000000000000000000000000000') {
-                                    cupcat.price = (forSale.base_price * .000000000000000001).toFixed(4).replace(/\.0+$/,'');
+                                if (forSale.payment_token === '0x0000000000000000000000000000000000000000') {
+                                    cupcat.price = (forSale.base_price * .000000000000000001).toFixed(4).replace(/\.0+$/, '');
                                 }
                             }
                         }
@@ -268,8 +397,11 @@
                 }
 
                 callback();
-            }).fail(function() {
+            }).fail(function () {
                 callback();
+            }).always(() => {
+                $('#previous').toggleClass('disabled', currentPage === 0);
+                $('#next').toggleClass('disabled', ((currentPage * 30) + 30) >= cupcats.length);
             });
         }
 

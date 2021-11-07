@@ -1,0 +1,17 @@
+{
+  "name": "rarity-2.0",
+  "version": "1.0.0",
+  "description": "",
+  "main": "metadata-maker.js",
+  "dependencies": {
+    "axios": "^0.24.0"
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://brandonborn@bitbucket.org/brandonborn/rarity-2.0.git"
+  },
+  "author": "Cupcat242",
+  "license": "GNU General Public License v3.0",
+  "homepage": "https://github.com/cupcat242/cupcat-rarity"
+}
