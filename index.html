@@ -19,16 +19,43 @@
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
     <style>
+        @import url("https://fonts.googleapis.com/css2?family=Patrick+Hand&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+
+        :root {
+            --main-bg: #9987cc;
+            --second-bg: #fafafb;
+            --txt-color: #455560;
+            --txt-white: #fff;
+            --main-color: #f6e7f9;
+            --second-color: #62b4ff;
+            --box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+            --transition-cubic: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            --radius: 0.2rem;
+            --primary: #3700b3;
+            --primary-hover: #bb8cfc;
+        }
+
         body {
-            background-color: #E5A4FF;
+            font-size: 20px;
+            margin: 0;
+            padding: 0;
+            background-color: var(--main-bg);
+            background-repeat: space;
+            overflow-x: hidden;
+            font-family: "Patrick Hand", cursive;
+            box-sizing: border-box;
         }
 
         .sidebar {
             width: 280px;
+            background-color: var(--main-color);
+        }
+
+        .select2-container--default .select2-selection--multiple li.select2-selection__choice {
+            background-color: var(--second-bg);
         }
 
         .page-container {
-            background-image: url(https://www.cupcatnft.com/BG2.png);
             background-position: 0px 0px;
             background-size: contain;
             background-repeat: repeat;
@@ -133,9 +160,9 @@
             </button>
         </div>
     </nav>
-    <div class="d-flex flex-column flex-shrink-0 p-3 bg-light sidebar">
+    <div class="d-flex flex-column flex-shrink-0 p-3 sidebar">
     <span class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-dark text-decoration-none title">
-        <span class="fs-6">Cupcats Official Rarity Rankings</span>
+        <span>Cupcats Official Rarity Rankings</span>
     </span>
         <hr>
         <div class="flex-column mb-auto filter-container">
