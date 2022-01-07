@@ -187,7 +187,7 @@
                 left: 0;
                 top: 56px;
                 bottom: 0;
-                z-index: 99;
+                z-index: 1031;
             }
 
             .cat-prop {
@@ -224,11 +224,30 @@
 <div class="page-container">
     <nav class="navbar fixed-top navbar-expand-lg navbar-light bg-light">
         <div class="container-fluid">
-            <span class="navbar-text"><strong>Cupcats Official Rarity Rankings</strong></span>
+            <span class="navbar-text">
+                <img src="cat3.png" alt="" height="28" style="margin-top: -2px;">
+                <strong class="ps-2">Cupcats Official Rarity Rankings</strong>
+            </span>
             <button class="navbar-toggler" type="button">
                 <span class="navbar-toggler-icon"></span>
             </button>
         </div>
+    </nav>
+    <nav class="navbar fixed-bottom navbar-expand-lg navbar-light bg-light">
+        <ul class="pagination pagination-lg" style="margin-bottom: 0px; justify-content: space-evenly;">
+            <li class="page-item disabled previous" style="width: 130px;">
+                <a class="page-link" href="#" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                    <span class="sr-only">Previous</span>
+                </a>
+            </li>
+            <li class="page-item next" style="width: 130px;">
+                <a class="page-link" href="#" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                    <span class="sr-only">Next</span>
+                </a>
+            </li>
+        </ul>
     </nav>
     <div class="d-flex flex-column flex-shrink-0 p-3 sidebar">
     <span class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-dark text-decoration-none title">
@@ -247,13 +266,13 @@
         <div class="pagination-container">
             <hr>
             <ul class="pagination pagination-lg" style="margin-bottom: 0px;">
-                <li class="page-item disabled" id="previous">
+                <li class="page-item disabled previous">
                     <a class="page-link" href="#" aria-label="Previous">
                         <span aria-hidden="true">&laquo;</span>
                         <span class="sr-only">Previous</span>
                     </a>
                 </li>
-                <li class="page-item" id="next">
+                <li class="page-item next">
                     <a class="page-link" href="#" aria-label="Next">
                         <span aria-hidden="true">&raquo;</span>
                         <span class="sr-only">Next</span>
@@ -366,13 +385,13 @@
             $('.sidebar').toggleClass('open');
         });
 
-        $('#previous').click(() => {
-            if (!$('#previous').hasClass('disabled')) {
+        $('.previous').click(() => {
+            if (!$('.previous').hasClass('disabled')) {
                 selectPage(--currentPage);
             }
         });
-        $('#next').click(() => {
-            if (!$('#next').hasClass('disabled')) {
+        $('.next').click(() => {
+            if (!$('.next').hasClass('disabled')) {
                 selectPage(++currentPage);
             }
         });
@@ -446,8 +465,8 @@
         function selectPage(pageNumber) {
             const pageCats = [];
             $('#cupcat-container').empty();
-            $('#previous').addClass('disabled');
-            $('#next').addClass('disabled');
+            $('.previous').addClass('disabled');
+            $('.next').addClass('disabled');
             for (let i = pageNumber * 30; i < ((pageNumber * 30) + 30) && i < (cupcats.length); i++) {
                 pageCats.push(cupcats[i]);
             }
@@ -504,8 +523,8 @@
             }).fail(function () {
                 callback();
             }).always(() => {
-                $('#previous').toggleClass('disabled', currentPage === 0);
-                $('#next').toggleClass('disabled', ((currentPage * 30) + 30) >= cupcats.length);
+                $('.previous').toggleClass('disabled', currentPage === 0);
+                $('.next').toggleClass('disabled', ((currentPage * 30) + 30) >= cupcats.length);
                 $('.loading-container').hide();
             });
         }
