@@ -365,7 +365,7 @@
             metaData = data;
             let i = 0;
             for (let prop in data) {
-                let selectHtml = `<div class="cat-prop-container mt-2"><label>${prop}<select class="cat-prop" multiple="multiple"></label>`;
+                let selectHtml = `<div class="cat-prop-container mt-1"><label>${prop}<select class="cat-prop" multiple="multiple"></label>`;
                 for (let type in data[prop]) {
                     selectHtml += `<option data-parent="${prop}" value="${type}">${type}</option>`
                 }
