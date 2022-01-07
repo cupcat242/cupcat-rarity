@@ -39,11 +39,18 @@
             font-size: 20px;
             margin: 0;
             padding: 0;
+            color: var(--txt-color);
             background-color: var(--main-bg);
             background-repeat: space;
             overflow-x: hidden;
             font-family: "Patrick Hand", cursive;
             box-sizing: border-box;
+        }
+
+        .btn.btn-primary {
+            background-color: var(--primary);
+            border-color: var(--primary) ;
+            color: var(--txt-white);
         }
 
         .sidebar {
@@ -91,6 +98,8 @@
         .card {
             margin: .5em auto .5em;
             height: calc(100% - 1em);
+            background-color: var(--second-bg);
+            box-shadow: var(--box-shadow);
         }
 
         input::-webkit-outer-spin-button,
@@ -109,6 +118,61 @@
 
         #filter {
             display: none;
+        }
+
+        .loading-container {
+            position: absolute;
+            top:0;
+            bottom: 0;
+            right: 0;
+            left: 0;
+            display: none;
+        }
+
+        .loading {
+            position: absolute;
+            top:0;
+            bottom: 0;
+            right: 0;
+            left: 0;
+            background-color: var(--primary-hover);
+            z-index: 999999;
+            opacity: .5;
+        }
+
+        .loading-text {
+            font-size: 40px;
+            color:black;
+            text-align: center;
+            position: absolute;
+            top: 45%;
+            left: calc(50% - 86px);
+            z-index: 9999999;
+            margin-top: 100px;
+        }
+
+        .loading-image {
+            position: absolute;
+            top: 45%;
+            left: calc(50% - 75px);
+            height: 120px;
+            margin-top:-60px;
+            -webkit-animation:spin 4s linear infinite;
+            -moz-animation:spin 4s linear infinite;
+            animation:spin 4s linear infinite;
+            z-index: 9999999;
+        }
+        @-moz-keyframes spin {
+            100% { -moz-transform: rotate(360deg); }
+        }
+        @-webkit-keyframes spin {
+            100% { -webkit-transform: rotate(360deg); }
+        }
+        @keyframes spin {
+            100% {
+                -webkit-transform: rotate(360deg);
+                transform:rotate(360deg);
+            }
         }
 
         @media (max-width: 860px) {
@@ -209,6 +273,11 @@
             </div>
         </div>
     </div>
+</div>
+<div class="loading-container">
+    <div class="loading"></div>
+    <img class="loading-image" src="cat3.png" alt="" height="120">
+    <div class="loading-text">Loading Cats...</div>
 </div>
 
 <script>
@@ -391,6 +460,7 @@
         }
 
         function getOpenSeaInfo(pageCats, callback) {
+            $('.loading-container').show();
             $.get(
                 {
                     url: 'https://api.opensea.io/api/v1/assets',
@@ -436,6 +506,7 @@
             }).always(() => {
                 $('#previous').toggleClass('disabled', currentPage === 0);
                 $('#next').toggleClass('disabled', ((currentPage * 30) + 30) >= cupcats.length);
+                $('.loading-container').hide();
             });
         }
 
